@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АИС Расчет кварплаты</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏠 АИС Расчет кварплаты</h1>
+            <div class="header-info">
+                <span id="currentDate"></span>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-button active" data-tab="calculation">📊 Расчет</button>
+            <button class="tab-button" data-tab="history">📋 История</button>
+            <button class="tab-button" data-tab="tariffs">💰 Тарифы</button>
+        </nav>
+
+        <!-- Вкладка расчета -->
+        <div id="calculation" class="tab-content active">
+            <div class="form-container">
+                <h2>Расчет квартплаты</h2>
+                
+                <form id="calculationForm" class="form-grid">
+                    <div class="form-section">
+                        <h3>Данные квартиры</h3>
+                        <div class="input-group">
+                            <label for="apartmentNumber">Номер квартиры:</label>
+                            <input type="text" id="apartmentNumber" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="owner">Собственник:</label>
+                            <input type="text" id="owner" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="area">Площадь (м²):</label>
+                            <input type="number" id="area" step="0.1" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="residents">Количество жильцов:</label>
+                            <input type="number" id="residents" required>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Показания счетчиков</h3>
+                        <div class="input-group">
+                            <label for="period">Период (ГГГГ-ММ):</label>
+                            <input type="month" id="period" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="coldWater">Холодная вода (м³):</label>
+                            <input type="number" id="coldWater" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="hotWater">Горячая вода (м³):</label>
+                            <input type="number" id="hotWater" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="electricity">Электричество (кВт·ч):</label>
+                            <input type="number" id="electricity" required>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="form-actions">
+                    <button type="button" onclick="getPreviousReadings()">📋 Получить предыдущие показания</button>
+                    <button type="button" onclick="calculatePayment()">🧮 Рассчитать</button>
+                    <button type="button" onclick="savePayment()">💾 Сохранить в историю</button>
+                </div>
+            </div>
+
+            <div id="calculationResult" class="result-container" style="display: none;">
+                <h3>Результат расчета</h3>
+                <div class="result-grid" id="resultDetails"></div>
+            </div>
+        </div>
+
+        <!-- Вкладка истории -->
+        <div id="history" class="tab-content">
+            <div class="history-controls">
+                <input type="text" id="searchApartment" placeholder="Фильтр по номеру квартиры">
+                <button onclick="loadPaymentHistory()">🔄 Обновить</button>
+            </div>
+            <div id="paymentHistory" class="history-list"></div>
+        </div>
+
+        <!-- Вкладка тарифов -->
+        <div id="tariffs" class="tab-content">
+            <div class="tariffs-container">
+                <h2>Текущие тарифы</h2>
+                <div id="currentTariffs" class="tariffs-grid"></div>
+                
+                <h3>Обновление тарифов</h3>
+                <form id="tariffForm" class="form-grid">
+                    <div class="input-group">
+                        <label for="heating">Отопление (руб/м²):</label>
+                        <input type="number" id="heating" step="0.01" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="coldWaterTariff">Холодная вода (руб/м³):</label>
+                        <input type="number" id="coldWaterTariff" step="0.01" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="hotWaterTariff">Горячая вода (руб/м³):</label>
+                        <input type="number" id="hotWaterTariff" step="0.01" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="electricityTariff">Электричество (руб/кВт·ч):</label>
+                        <input type="number" id="electricityTariff" step="0.01" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="maintenance">Содержание (руб/м²):</label>
+                        <input type="number" id="maintenance" step="0.01" required>
+                    </div>
+                </form>
+                <button onclick="updateTariffs()">💾 Обновить тарифы</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Загрузка...</p>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>
